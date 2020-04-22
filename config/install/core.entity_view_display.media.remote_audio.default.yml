@@ -1,0 +1,48 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.remote_audio.field_media_audio_stream
+    - field.field.media.remote_audio.field_preview_image
+    - field.field.media.remote_audio.field_remote_audio_description
+    - media.type.remote_audio
+  module:
+    - media_entity_audio
+    - text
+id: media.remote_audio.default
+targetEntityType: media
+bundle: remote_audio
+mode: default
+content:
+  created:
+    type: timestamp
+    weight: 1
+    region: content
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
+  field_media_audio_stream:
+    type: audio_stream_html5
+    label: visually_hidden
+    weight: 0
+    settings:
+      controls: true
+    third_party_settings: {  }
+    region: content
+  field_remote_audio_description:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+hidden:
+  field_preview_image: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

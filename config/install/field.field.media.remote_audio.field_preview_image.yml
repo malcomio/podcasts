@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_preview_image
+    - media.type.image
+    - media.type.remote_audio
+id: media.remote_audio.field_preview_image
+field_name: field_preview_image
+entity_type: media
+bundle: remote_audio
+label: 'Preview image'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_remote_audio_description
+    - media.type.remote_audio
+  module:
+    - text
+id: media.remote_audio.field_remote_audio_description
+field_name: field_remote_audio_description
+entity_type: media
+bundle: remote_audio
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

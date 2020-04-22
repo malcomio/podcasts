@@ -1,0 +1,20 @@
+name: Podcasts
+description: Podcast display for Royal Mail
+type: module
+package: RMG
+core: 8.x
+dependencies:
+  - paragraphs:paragraphs
+  - media_entity_audio:media_entity_audio
+
+config_devel:
+  - core.entity_form_display.media.remote_audio.default
+  - core.entity_view_display.media.remote_audio.default
+  - core.entity_view_display.media.remote_audio.preview
+  - field.field.media.remote_audio.field_media_audio_stream
+  - field.field.media.remote_audio.field_preview_image
+  - field.field.media.remote_audio.field_remote_audio_description
+  - field.storage.media.field_media_audio_stream
+  - field.storage.media.field_remote_audio_description
+  - media.type.remote_audio
+  - views.view.podcasts

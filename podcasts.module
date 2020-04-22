@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * @file
+ * Display podcasts using media_entity_audio.
+ */
+
+/**
+ * Implements template_preprocess_media_audio().
+ */
+function podcasts_preprocess_media_audio(&$variables) {
+  $url = $variables['sources'][0]['url'];
+  $variables['embed'] = podcasts_embed_url($url);
+}
+
+/**
+ * Get the provider of a media audio stream.
+ *
+ * @param string $host
+ *   The media domain.
+ *
+ * @return string
+ *   The name of the media provider.
+ */
+function podcasts_get_provider($host) {
+  $provider = '';
+  $known_providers = [
+    'anchor.fm' => 'anchorfm',
+    'soundcloud.com' => 'soundcloud',
+  ];
+  if (!empty($known_providers[$host])) {
+    $provider = $known_providers[$host];
+  }
+  return $provider;
+}
+
+/**
+ * Prepare a podcast embed.
+ *
+ * @param string $url
+ *   The podcast URL.
+ *
+ * @return array|null
+ *   A render array for embedding the podcast.
+ */
+function podcasts_embed_url($url) {
+  $parts = parse_url($url);
+  $host = $parts['host'];
+
+  $provider = podcasts_get_provider($host);
+  $function = 'podcasts_embed_' . $provider;
+  if (function_exists($function)) {
+    return call_user_func($function, $parts['path']);
+  }
+}
+
+/**
+ * Prepare an embed iframe for anchor.fm.
+ *
+ * @param string $path
+ *   The path of the podcast.
+ *
+ * @return array
+ *   Render array for embedding the podcast from anchor.fm.
+ */
+function podcasts_embed_anchorfm($path) {
+
+  $path_array = explode('/', $path);
+  $podcast = $path_array[1];
+
+  // Example URLs:
+  // https://anchor.fm/rmradio/embed/episodes/Delivering-for-our-country-ed153l/a-a1vv0kj.
+  // https://anchor.fm/rmradio/episodes/Delivering-for-our-country-ed153l/a-a1vv0kj.
+  switch ($path_array[2]) {
+    case 'embed':
+      $episode = $path_array[4] . '/' . $path_array[5];
+      break;
+
+    case 'episodes':
+      $episode = $path_array[3] . '/' . $path_array[4];
+      break;
+  }
+
+  if (!empty($podcast) && !empty($episode)) {
+    $embed_url = 'https://anchor.fm/' . $podcast . '/embed/episodes/' . $episode;
+    return podcasts_iframe($embed_url, 'anchorfm');
+  }
+}
+
+/**
+ * Prepare an embed iframe for soundcloud.
+ *
+ * @param string $path
+ *   The path of the podcast.
+ *
+ * @return array
+ *   Render array for embedding the podcast from soundcloud.
+ */
+function podcasts_embed_soundcloud($path) {
+  $url = 'https%3A//soundcloud.com' . $path;
+  $embed_url = 'https://w.soundcloud.com/player/?url=' . $url . '&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true';
+  return podcasts_iframe($embed_url, 'soundcloud');
+}
+
+/**
+ * Prepare a podcast URL for embedding as an iframe.
+ *
+ * @param string $embed_url
+ *   The URL of the podcast to be embedded.
+ * @param string $provider
+ *   The name of the podcast host.
+ *
+ * @return array
+ *   Render array for an embed iframe.
+ */
+function podcasts_iframe($embed_url, $provider) {
+  return [
+    '#type' => 'html_tag',
+    '#tag' => 'iframe',
+    '#attributes' => [
+      'src' => $embed_url,
+      'frameborder' => 0,
+      'class' => [
+        'podcast-embed',
+        'podcast-embed-' . $provider,
+      ],
+    ],
+  ];
+}

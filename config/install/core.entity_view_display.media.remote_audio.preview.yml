@@ -1,0 +1,52 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.preview
+    - field.field.media.remote_audio.field_media_audio_stream
+    - field.field.media.remote_audio.field_preview_image
+    - field.field.media.remote_audio.field_remote_audio_description
+    - image.style.promo_card
+    - media.type.remote_audio
+  module:
+    - media
+    - text
+id: media.remote_audio.preview
+targetEntityType: media
+bundle: remote_audio
+mode: preview
+content:
+  created:
+    type: timestamp
+    weight: 1
+    region: content
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
+  field_preview_image:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: promo_card
+      image_link: ''
+    third_party_settings: {  }
+    type: media_thumbnail
+    region: content
+  field_remote_audio_description:
+    weight: 2
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    type: text_summary_or_trimmed
+    region: content
+hidden:
+  field_media_audio_stream: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
